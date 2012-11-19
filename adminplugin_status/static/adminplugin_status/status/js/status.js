@@ -169,10 +169,15 @@
         parse: function(response) {
             var self = this;
             // IE8 Fix from original parse function.
-            var fakeHtml = $('<html>' + response + '</html>');
+            //  breaks title though.  Rolling back.
+            //var fakeHtml = $('<html>' + response + '</html>');
+
+            var fakeHtml = document.createElement('html');
+            fakeHtml.innerHTML = response;
+            var fakeHtmlJQ = $(fakeHtml);
 
             // Find fix to take passed in context arguments
-            fakeHtml.find(this.get('toValidate') + ' a[href]').each(function() {
+            fakeHtmlJQ.find(this.get('toValidate') + ' a[href]').each(function() {
                 var el = $(this);
                 var url = el.attr('href');
                 if (self.addOrSkip(url) ) {
@@ -181,9 +186,9 @@
             });
             return {
                 url: this.get('url'),
-                html: fakeHtml,
-                metaTitle: fakeHtml.find('title').text() || "{No title}",
-                metaDescription: fakeHtml.find('meta[name="description"]').attr('content') || "{No description}"
+                html: fakeHtmlJQ,
+                metaTitle: fakeHtmlJQ.find('title').text() || "{No title}",
+                metaDescription: fakeHtmlJQ.find('meta[name="description"]').attr('content') || "{No description}"
             };
         },
         url: function() {
