@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Le styles -->
+    <!--
     <link href="/static/adminplugin_status/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/adminplugin_status/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    -->
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
     <link href="/static/adminplugin_status/status/css/status.css" rel="stylesheet">
 
@@ -121,7 +124,12 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/static/adminplugin_status/status/js/jquery.min.js"></script>
+
+    <!--
     <script src="/static/adminplugin_status/bootstrap/js/bootstrap.min.js"></script>
+    -->
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="/static/adminplugin_status/status/js/underscore.min.js"></script>
     <script type="text/javascript" src="/static/adminplugin_status/status/js/backbone.min.js"></script>
     <script type="text/javascript" src="/static/adminplugin_status/status/js/jsuri-1.1.1.min.js"></script>
@@ -147,7 +155,7 @@
     </script>
 
     <script type="text/template" id="links-dropdown-template">
-        <div class="btn-group" id="<%= dropdownID %>">
+        <div class="btn-group pull-right" id="<%= dropdownID %>">
             <a class="dropdown-toggle btn btn-mini" data-toggle="dropdown" href="#<%= dropdownID %>">
                 <%= links.length %>
                 <span class="caret"></span>
