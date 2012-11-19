@@ -1,7 +1,8 @@
 adminplugin_status
 ###################
 
-A jquery based link status checker for your django site.
+A jQuery based link status checker for your django site.  Very nearly a pure import of
+http://www.codingnot.es/status/
 
 
 Notes
@@ -16,14 +17,14 @@ Instructions
 1. Add 'adminplugin_status' to settings.py:INSTALLED_APPS
 2. Configure your url patterns
 
-    urlpatterns = patterns('',
-        (r'^admin/status/', include('adminplugin_status.urls')),  # automatically claims /admin/status
-    ) + urlpatterns
+        urlpatterns = patterns('',
+            (r'^admin/status/', include('adminplugin_status.urls')),  # automatically claims /admin/status
+        ) + urlpatterns
 
 3.  Configure settings.py to indicate the DEFAULT_DOM_PREFIX to search for
     anchors.  In the case of django, this is probably something like "#content".
 
-    ADMINSTATUS_DOM_PREFIX = '#content'  
+        ADMINSTATUS_DOM_PREFIX = '#content'  
     
     If you want to search your menus, try just doing 'html'
 
@@ -44,3 +45,11 @@ I skip some links including:
 5. /logout
 6. Anything with .doc or .pdf
 7. And only scrape the section of the document
+
+
+Todo
+----
+
+ - Configure static/js/static.js to take a list of elements to exclude, instead of altering the source.
+ - Upstream IE8 compatability change in the scraper
+ - See if an ES5Shim will work with any of the alternate tabs
