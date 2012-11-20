@@ -52,5 +52,9 @@ Todo
 
  - Configure static/js/static.js to take a list of elements to exclude, instead of altering the source.
  - Upstream IE8 compatability change in the scraper
-   - And... the IE8 compat change errs because it executes javascript on imported pages.  Reverted.
+   - And... the IE8 compat change errs because it executes javascript on
+     imported pages.
+   - And crudely fixed with oldstyle text parsing.  Unfortunately, this really
+     only works reliably on 'your own' text and title tags that are of fixed
+     format and well structured.
  - See if an ES5Shim will work with any of the alternate tabs
