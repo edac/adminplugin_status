@@ -166,15 +166,55 @@
 
             return true;
         },
+
+        // Bugs?  Sure, lots of them.  This would be better done with a regex
+        getMetaDesc: function(raw, fakeHtmlJQ) {
+            if(navigator.appVersion.indexOf("MSIE" != -1)) {
+                return raw.substring(
+                    raw.indexOf( '<meta[name="description"]>' ) +  7,
+                    raw.indexOf( '</meta' )
+                );
+            }
+
+            return fakeHtmlJQ.find('meta[name="description"]').attr('content') || "{No description}";
+        },
+        // Bugs?  Sure, lots of them.  This would be better done with a regex
+        getMetaTitle: function(raw, fakeHtmlJQ) {
+            if(navigator.appVersion.indexOf("MSIE" != -1)) {
+                return raw.substring(
+                    raw.toLowerCase().indexOf('<title>') + 7,
+                    raw.toLowerCase().indexOf('</title')
+                );  
+                // we control our structure, but this could do anything on
+                // other pages
+            }
+
+            return fakeHtmlJQ.find('title').text() || "{No title}";
+
+        },
         parse: function(response) {
             var self = this;
-            // IE8 Fix from original parse function.
-            //  breaks title though.  Rolling back.
-            //var fakeHtml = $('<html>' + response + '</html>');
+            // Okay -- we control Django and our page layout.  We don't
+            // control other people's layout.  The original worked better in
+            // general than what I'm doing, but doesn't perform in our
+            // supported IE8.  We can manually tear out our title and
+            // description, but there exist no guarantees in a remote page.
+            
+            var fakeHtml = null;
+            var fakeHtmlJQ = null;
 
-            var fakeHtml = document.createElement('html');
-            fakeHtml.innerHTML = response;
-            var fakeHtmlJQ = $(fakeHtml);
+            if(navigator.appVersion.indexOf("MSIE" != -1)) {
+                // See you in hell MS, I really wanted a body element here for
+                // no reason whatsoever, so I could fall back onto lousy textual
+                // mode parsing like it's 1997
+                fakeHtml = $('<html>' + response + '</html>');
+                fakeHtmlJQ = fakeHtml;
+            }
+            else {
+                fakeHtml = document.createElement('html');
+                fakeHtml.innerHTML = response;
+                fakeHtmlJQ = $(fakeHtml);
+            }
 
             // Find fix to take passed in context arguments
             fakeHtmlJQ.find(this.get('toValidate') + ' a[href]').each(function() {
@@ -184,11 +224,13 @@
                     self.addLinksTo(urlToUri(el.attr('href')));
                 }
             });
+
             return {
                 url: this.get('url'),
                 html: fakeHtmlJQ,
-                metaTitle: fakeHtmlJQ.find('title').text() || "{No title}",
-                metaDescription: fakeHtmlJQ.find('meta[name="description"]').attr('content') || "{No description}"
+                //metaTitle: fakeHtmlJQ.find('title').text() || "{No title}",
+                metaTitle: self.getMetaTitle(response, fakeHtmlJQ),
+                metaDescription: self.getMetaDesc(response, fakeHtmlJQ)
             };
         },
         url: function() {
